@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #74abd8 0%, #3b6d9c 50%, #1e456e 100%);
+}
+
+.main-card {
+    background: white;
+    width: 95%;
+    max-width: 1000px;
+    height: 600px;
+    border-radius: 30px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+/* Header Styles */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #000;
+}
+
+.logo-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.brand-name { font-size: 24px; font-weight: bold; color: #333; }
+
+/* Alerta */
+.alert-box {
+    background-color: #ff5252;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+    animation: shake 0.5s ease-in-out;
+}
+
+.hidden { display: none; }
+
+/* Layout dos Gráficos */
+.charts-container {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 20px 0;
+    gap: 10px;
+}
+
+.chart-wrapper {
+    width: 12%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Botões */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.btn {
+    text-decoration: none;
+    background: #2b5d8f;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn:hover { background: #1e456e; }
+
+/* Seta de Voltar */
+.arrow-icon {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-top: 3px solid #333;
+    border-left: 3px solid #333;
+    transform: rotate(-45deg);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}

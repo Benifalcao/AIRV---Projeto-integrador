@@ -1,0 +1,181 @@
+/* 1. Reset Total e Configurações de Fonte */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 2. O Fundo da Página (Body com Gradiente) */
+body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center; /* Centraliza o card horizontalmente */
+    align-items: center;     /* Centraliza o card verticalmente */
+    background: linear-gradient(135deg, #74abd8 0%, #3b6d9c 50%, #1e456e 100%); /* Gradiente azul suave */
+    overflow: hidden; /* Evita rolagens indesejadas */
+}
+
+/* 3. O Card Branco Central */
+.main-card {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 900px; /* Largura máxima maior para este layout */
+    height: 500px;     /* Altura fixa aproximada conforme imagem */
+    border-radius: 25px; /* Bordas arredondadas do card */
+    padding: 25px 35px; /* Espaçamento interno */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    
+    /* Layout interno do card */
+    display: flex;
+    flex-direction: column;    /* Elementos empilhados verticalmente */
+    justify-content: space-between; /* Empurra header para cima, botões para baixo, texto no meio */
+}
+
+/* 4. Estilos do Header e Centralização do Logo */
+.card-header {
+    display: flex;
+    justify-content: space-between; /* Alinha ícone à esquerda, logo central, spacer à direita */
+    align-items: center; /* Centraliza verticalmente */
+    width: 100%;
+}
+
+/* Estilo da Seta de Voltar (CSS puro) */
+.back-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.back-link:hover {
+    transform: translateX(-3px); /* Efeito sutil de movimento ao passar o mouse */
+}
+
+.arrow-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid #333; /* Cor da seta */
+    border-left: 3px solid #333;
+    transform: rotate(-45deg); /* Gira para virar uma seta para esquerda */
+    position: relative;
+}
+
+.arrow-icon::after {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 3px;
+    background-color: #333;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 3px;
+    left: -2px;
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre o avatar e o texto 'AIVR' */
+}
+
+.logo-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #000;
+}
+
+.logo-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.brand-name {
+    font-size: 60px;
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.header-spacer {
+    width: 40px; /* Mesma largura do link de seta para ajudar na centralização do logo */
+}
+
+/* 5. Estilos da Caixa de Texto Azul */
+.info-text-box {
+    background-color: #2b5d8f; /* O azul escuro exato da imagem */
+    color: #ffffff;
+    padding: 30px 40px; /* Espaçamento generoso interno */
+    border-radius: 15px; /* Bordas arredondadas da caixa de texto */
+    font-size: 14px;
+    line-height: 1.6;   /* Melhor legibilidade */
+    text-align: justify; /* Texto alinhado */
+    width: 100%;
+    max-width: 600px;    /* Largura máxima centralizada */
+    margin: 0 auto;     /* Centraliza a caixa no card */
+}
+
+/* 6. Estilos dos Botões de Ação */
+.action-buttons-group {
+    display: flex;
+    justify-content: center; /* Centraliza os dois botões no card */
+    gap: 49px; /* Espaço entre os dois botões */
+    margin-top: 20px;
+    margin-bottom: 40px; /* Pequeno ajuste inferior */
+}
+
+.action-btn {
+    text-decoration: none;
+    background-color: #3b6d9c;
+    color: #ffffff;
+    min-width: 220px;       /* Era 180px, agora estão mais largos */
+    height: 60px;           /* Defini uma altura fixa maior (era uns 48px) */
+    font-size: 18px;        /* Aumentei a letra para acompanhar o botão */
+    font-weight: 600;       /* Deixei o texto um pouco mais grosso */
+    border-radius: 15px;    /* Bordas um pouco mais arredondadas para combinar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* Ajuste o espaçamento entre eles se necessário */
+.action-buttons-group {
+    display: flex;
+    justify-content: center;
+    gap: 70px;              /* Aumentei o espaço entre um botão e outro */
+    margin-top: 25px;
+}
+/* Efeitos de Interação nos Botões */
+.action-btn:hover {
+    background-color: #2b5d8f; /* Escurece ao passar o mouse */
+    transform: translateY(-2px); /* Efeito sutil de flutuação */
+}
+
+.action-btn:active {
+    transform: translateY(0); /* "Afunda" ao clicar */
+}
+
+/* Define a animação chamada 'aparecer' */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px); /* Começa um pouco abaixo */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);    /* Termina na posição original */
+    }
+}
+
+/* Aplica a animação ao corpo da página assim que ela carrega */
+body {
+    animation: fadeIn 0.6s ease-out forwards;
+}

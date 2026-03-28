@@ -1,11 +1,11 @@
 // Dados de exemplo: Consumo em m3 para cada dia da semana
 const dadosConsumo = {
-    'chart-seg': 85,
-    'chart-ter': 101, // Alto consumo
+    'chart-seg': 85, // m3
+    'chart-ter': 20, // Alto consumo
     'chart-qua': 95,
     'chart-qui': 70,
     'chart-sex': 100, // Alto consumo
-    'chart-sab': 60,
+    'chart-sab': 100,
     'chart-dom': 40
 };
 

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIRV - Monitoramento de Vazão</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #eef2f9;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-icon {
+      width: 46px; height: 46px;
+      background: #3b82f6;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+
+    .logo-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .logo-text p {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .header-time {
+      text-align: right;
+    }
+
+    .header-time .ht-label {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .header-time .ht-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 24px 60px;
+    }
+
+    /* ── TOP CARDS ── */
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 22px 18px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-blue   { border-left: 4px solid #3b82f6; }
+    .card-teal   { border-left: 4px solid #14b8a6; }
+    .card-orange { border-left: 4px solid #f97316; }
+
+    .card-body .c-label {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .card-body .c-value {
+      font-size: 34px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1;
+    }
+
+    .card-body .c-sub {
+      margin-top: 7px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .c-sub.green  { color: #16a34a; }
+    .c-sub.muted  { color: #64748b; font-weight: 400; }
+    .c-sub.orange { color: #f97316; }
+
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .ci-blue   { background: #eff6ff; }
+    .ci-teal   { background: #f0fdfa; }
+    .ci-orange { background: #fff7ed; }
+
+    /* ── CHART SECTION ── */
+    .chart-section {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      color: #64748b;
+      transition: all .15s;
+    }
+
+    .tab-btn.active {
+      background: #3b82f6;
+      color: #fff;
+      border-color: #3b82f6;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+    }
+
+    /* ── ALERTS SECTION ── */
+    .alerts-section {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 24px;
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .alert-item {
+      background: #fff8f3;
+      border: 1px solid #fed7aa;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge-orange {
+      background: #fed7aa;
+      color: #c2410c;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">💧</div>
+    <div class="logo-text">
+      <h1>AIRV - Monitoramento</h1>
+      <p>Dados reais via Firebase</p>
+    </div>
+  </div>
+  <div class="header-time">
+    <div class="ht-label">Atualizado em</div>
+    <div class="ht-value" id="clock">--/--/---- - --:--</div>
+  </div>
+</header>
+
+<main>
+  <div class="cards-row">
+    <div class="card card-blue">
+      <div class="card-body">
+        <div class="c-label">Consumo Atual (Tempo Real)</div>
+        <div class="c-value" id="consumo-real">0.0 L</div>
+        <div class="c-sub muted">Lendo sensor...</div>
+      </div>
+      <div class="card-icon ci-blue">💧</div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-body">
+        <div class="c-label">Média Diária</div>
+        <div class="c-value" id="consumo-media">0.0 L</div>
+        <div class="c-sub muted">Histórico</div>
+      </div>
+      <div class="card-icon ci-teal">📈</div>
+    </div>
+
+    <div class="card card-orange">
+      <div class="card-body">
+        <div class="c-label">Status do Sistema</div>
+        <div class="c-value" id="status-vazamento" style="font-size: 24px;">OK</div>
+        <div class="c-sub orange" id="alerta-texto">Sem vazamentos</div>
+      </div>
+      <div class="card-icon ci-orange">⚠️</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-wrapper">
+      <canvas id="mainChart"></canvas>
+    </div>
+  </div>
+
+  <div class="alerts-section" id="alerts-container">
+    <div class="sec-header">
+      <span style="font-size:20px">⚠️</span>
+      <h2>Logs de Alertas</h2>
+    </div>
+    </div>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  // TODO: Substitua pelos seus dados do Console Firebase
+  const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "airv-ead70.firebaseapp.com",
+    databaseURL: "https://airv-ead70-default-rtdb.firebaseio.com",
+    projectId: "airv-ead70",
+    storageBucket: "airv-ead70.appspot.com",
+    messagingSenderId: "SEU_ID",
+    appId: "SEU_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // --- Lógica do Gráfico ---
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Array(10).fill('--:--'),
+      datasets: [{
+        label: 'Consumo em Tempo Real (L)',
+        data: Array(10).fill(0),
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59,130,246,0.06)',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  // --- Escutando o Firebase ---
+  // Substitua 'leitura' pelo nome da chave que o seu ESP32 envia
+  const sensorRef = ref(db, 'sensor/vazao'); 
+  onValue(sensorRef, (snapshot) => {
+    const valor = snapshot.val() || 0;
+    
+    // Atualiza Card
+    document.getElementById('consumo-real').textContent = valor.toFixed(1) + " L";
+
+    // Atualiza Gráfico (Adiciona novo ponto e remove o antigo)
+    const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    chart.data.labels.push(agora);
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.push(valor);
+    chart.data.datasets[0].data.shift();
+    chart.update();
+
+    // Lógica simples de alerta no Card
+    if(valor > 10) { // Exemplo: se passar de 10L considera crítico
+        document.getElementById('status-vazamento').textContent = "ALERTA";
+        document.getElementById('alerta-texto').textContent = "Consumo Elevado!";
+    } else {
+        document.getElementById('status-vazamento').textContent = "OK";
+        document.getElementById('alerta-texto').textContent = "Sem vazamentos";
+    }
+  });
+
+  // Relógio
+  setInterval(() => {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleString('pt-BR');
+  }, 1000);
+
+</script>
+</body>
+</html>

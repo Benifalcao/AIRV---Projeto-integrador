@@ -14,7 +14,6 @@
       color: #1e293b;
       min-height: 100vh;
     }
-
     /* ── HEADER ── */
     header {
       background: #fff;
@@ -270,14 +269,14 @@
   import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
   // TODO: Substitua pelos seus dados do Console Firebase
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
+ const firebaseConfig = {
+    apiKey: "AIzaSyDiTV1v8Mr9Ap3r_vKpPRWdRdKezJ_IokM", // A chave que apareceu no seu Arduino
     authDomain: "airv-ead70.firebaseapp.com",
-    databaseURL: "https://airv-ead70-default-rtdb.firebaseio.com",
+    databaseURL: "https://airv-ead70-default-rtdb.firebaseio.com/",
     projectId: "airv-ead70",
     storageBucket: "airv-ead70.appspot.com",
-    messagingSenderId: "SEU_ID",
-    appId: "SEU_APP_ID"
+    messagingSenderId: "696286280062", // Esse número estava no seu print da aba Geral
+    appId: "1:696286280062:web:a1d8eadcdc12b503e05b2f" // Ele aparece logo abaixo da apiKey no console
   };
 
   const app = initializeApp(firebaseConfig);
@@ -302,30 +301,35 @@
   });
 
   // --- Escutando o Firebase ---
-  // Substitua 'leitura' pelo nome da chave que o seu ESP32 envia
-  const sensorRef = ref(db, 'sensor/vazao'); 
-  onValue(sensorRef, (snapshot) => {
+  // Escutando a Vazão (L/min)
+  const vazaoRef = ref(db, 'sensor/vazao'); 
+  onValue(vazaoRef, (snapshot) => {
     const valor = snapshot.val() || 0;
-    
-    // Atualiza Card
-    document.getElementById('consumo-real').textContent = valor.toFixed(1) + " L";
+    document.getElementById('consumo-real').textContent = valor.toFixed(1) + " L/min";
 
-    // Atualiza Gráfico (Adiciona novo ponto e remove o antigo)
-    const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    // Atualiza Gráfico
+    const agora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
     chart.data.labels.push(agora);
     chart.data.labels.shift();
     chart.data.datasets[0].data.push(valor);
     chart.data.datasets[0].data.shift();
     chart.update();
 
-    // Lógica simples de alerta no Card
-    if(valor > 10) { // Exemplo: se passar de 10L considera crítico
+    // Lógica de alerta
+    if(valor > 5) { // Se a vazão for alta, avisa
         document.getElementById('status-vazamento').textContent = "ALERTA";
-        document.getElementById('alerta-texto').textContent = "Consumo Elevado!";
+        document.getElementById('alerta-texto').textContent = "Vazão Elevada!";
     } else {
         document.getElementById('status-vazamento').textContent = "OK";
-        document.getElementById('alerta-texto').textContent = "Sem vazamentos";
+        document.getElementById('alerta-texto').textContent = "Fluxo Normal";
     }
+  });
+
+  // Escutando o Total Acumulado (Litros)
+  const totalRef = ref(db, 'sensor/total');
+  onValue(totalRef, (snapshot) => {
+    const total = snapshot.val() || 0;
+    document.getElementById('consumo-media').textContent = total.toFixed(2) + " L";
   });
 
   // Relógio
